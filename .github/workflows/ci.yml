@@ -24,7 +24,8 @@ jobs:
           current_branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})
           git fetch origin main
           git fetch origin $current_branch
-          javac $(git diff --name-only origin/main...$current_branch | grep '\.java$')
+          javac $(git diff --name-only origin/main | grep '\.java$')
+
 
 
 

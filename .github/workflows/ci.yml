@@ -20,4 +20,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Compile Java files
-        run: javac $(git diff --name-only origin/main...HEAD | grep '\.java$')
+        run: |
+          git fetch origin main
+          javac $(git diff --name-only origin/main...feature-branch | grep '\.java$')
+

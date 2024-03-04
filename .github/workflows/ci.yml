@@ -21,7 +21,7 @@ jobs:
 
       - name: Compile Java files
         run: |
-          current_branch=$(echo ${GITHUB_REF#refs/heads/})
+          current_branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})
           git fetch origin main
           javac $(git diff --name-only origin/main...$current_branch | grep '\.java$')
 

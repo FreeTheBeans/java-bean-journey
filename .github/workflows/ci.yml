@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  verify-code:
+  VerifyChangedCode:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: '21'
           distribution: 'adopt'
 
       - name: Compile Java files
@@ -24,6 +24,7 @@ jobs:
           current_branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})
           git fetch origin main
           git fetch origin $current_branch
+          echo "testing compilation for:"
           echo $(git diff --name-only origin/main | grep '\.java$')
           javac $(git diff --name-only origin/main | grep '\.java$')
 

@@ -23,7 +23,7 @@ jobs:
           git fetch origin $current_branch
           java_files=$(git diff --name-only --diff-filter=d origin/main | grep '\.java$' || true)
           echo "::set-output name=java_files::$java_files"
-          echo "Files found: $java_file"
+          echo "Files found: $java_files"
 
   CompileJavaFiles:
     needs: GetJavaFiles

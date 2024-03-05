@@ -25,8 +25,13 @@ jobs:
           git fetch origin main
           git fetch origin $current_branch
           echo "testing compilation for:"
-          echo $(git diff --name-only --diff-filter=d origin/main | grep '\.java$')
-          javac $(git diff --name-only --diff-filter=d origin/main | grep '\.java$')
+          java_files=$(git diff --name-only --diff-filter=d origin/main | grep '\.java$')
+          if [ -n "$java_files" ]; then
+            echo "$java_files"
+            javac $java_files
+          else
+            echo "No Java files to compile."
+          fi
 
 
 

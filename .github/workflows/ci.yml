@@ -6,8 +6,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  VerifyChangedCode:
+  GetJavaFiles:
     runs-on: ubuntu-latest
+    outputs:
+      java_files: ${{ steps.get-diff.outputs.java_files }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get Java file differences
+        id: get-diff
+        run: |
+          java_files=$(git diff --name-only --diff-filter=d origin/main | grep '\.java$' || true)
+          echo "::set-output name=java_files::$java_files"
+
+  CompileJavaFiles:
+    needs: GetJavaFiles
+    runs-on: ubuntu-latest
+    if: ${{ needs.GetJavaFiles.outputs.java_files != '' }}
 
     steps:
       - name: Checkout code
@@ -21,16 +38,7 @@ jobs:
 
       - name: Compile Java files
         run: |
-          current_branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})
-          git fetch origin main
-          git fetch origin $current_branch
-          echo "testing compilation for:"
-          java_files=$(git diff --name-only --diff-filter=d origin/main | grep '\.java$')
-          if [ -n "$java_files" ]; then
-            for java_file in $java_files; do
-              echo "Compiling $java_file"
-              javac $java_file
-            done
-          else
-            echo "No Java files to compile."
-          fi
+          for java_file in ${{ needs.GetJavaFiles.outputs.java_files }}; do
+            echo "Compiling $java_file"
+            javac "$java_file"
+          done

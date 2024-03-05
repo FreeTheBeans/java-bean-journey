@@ -18,6 +18,9 @@ jobs:
       - name: Get Java file differences
         id: get-diff
         run: |
+          current_branch=$(echo ${GITHUB_HEAD_REF#refs/heads/})
+          git fetch origin main
+          git fetch origin $current_branch
           java_files=$(git diff --name-only --diff-filter=d origin/main | grep '\.java$' || true)
           echo "::set-output name=java_files::$java_files"
           echo "Files found: $java_file"

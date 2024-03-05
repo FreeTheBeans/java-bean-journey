@@ -7,7 +7,7 @@ import java.util.Scanner;
  * This will serve as a guide to create the
  * GameManager with connections to the server
  * through the API. References here to "server"
- * are meant to be replaced
+ * are meant to be replaced.
  */
 // ==============
 

@@ -27,12 +27,10 @@ jobs:
           echo "testing compilation for:"
           java_files=$(git diff --name-only --diff-filter=d origin/main | grep '\.java$')
           if [ -n "$java_files" ]; then
-            echo "$java_files"
-            javac $java_files
+            for java_file in $java_files; do
+              echo "Compiling $java_file"
+              javac $java_file
+            done
           else
             echo "No Java files to compile."
           fi
-
-
-
-

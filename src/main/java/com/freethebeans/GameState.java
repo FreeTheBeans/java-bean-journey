@@ -3,9 +3,9 @@ package com.freethebeans;
 public class GameState {
     private String context;
     private String[] options;
-    private int[] transitions;
+    private String[] transitions;
 
-    public GameState(String context, String[] options, int[] transitions) {
+    public GameState(String context, String[] options, String[] transitions) {
         this.context = context;
         this.options = options;
         this.transitions = transitions;
@@ -19,7 +19,7 @@ public class GameState {
         return options;
     }
 
-    public int[] getTransitions() {
+    public String[] getTransitions() {
         return transitions;
     }
 }

@@ -42,7 +42,5 @@ jobs:
 
       - name: Compile Java files
         run: |
-          for java_file in ${{ needs.GetJavaFiles.outputs.java_files }}; do
-            echo "Compiling $java_file"
-            javac "$java_file"
-          done
+          mvn clean
+          mvn install

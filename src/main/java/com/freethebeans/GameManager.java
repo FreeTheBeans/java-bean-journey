@@ -14,29 +14,26 @@ public class GameManager {
         scanner = new Scanner(System.in);
     }
 
-    public void runGame() {
-        String request = String.format("%s:%d/api/ping", SERVER_ENDPOINT, SERVER_PORT);
-        String response = new RestTemplate().getForObject(request, String.class);
-        JSONObject responseJSON = new JSONObject(response);
-        System.out.println("Response from Server: " + responseJSON.getString("message"));
+    public void runGame() throws Exception {
+        // check for connection to server - expect 'pong'
+        pingPong();
 
         String currentStateID = "dummyState";
 
-        System.out.println("Welcome to Bean Escape Simulator!");
-        System.out.println("Press enter to begin");
+        System.out.println("-= PRESS ENTER =-");
         scanner.nextLine();
 
         while (true) {
             GameState currentState = getGameState(currentStateID);
             String[] currentStateOptions = currentState.getOptions();
             String[] currentStateTransitions = currentState.getTransitions();
-            System.out.println(currentState.getContext());
+            System.out.println('\n' + currentState.getContext() + '\n');
 
             for (int i = 0; i < currentStateOptions.length; i++) {
                 System.out.println((i + 1) + ") " + currentStateOptions[i]);
             }
 
-            System.out.println("Select your next move:");
+            // System.out.println("Select your next move:");
             System.out.print("> ");
             String input = scanner.nextLine();
 
@@ -56,6 +53,25 @@ public class GameManager {
         scanner.close();
     }
 
+    private void pingPong() throws Exception {
+        try {
+            String request = String.format("%s:%d/api/ping", SERVER_ENDPOINT, SERVER_PORT);
+            @SuppressWarnings("null")
+            String response = new RestTemplate().getForObject(request, String.class);
+            JSONObject responseJSON = new JSONObject(response);
+            String res = responseJSON.getString("message");
+            if (res.equals("pong")) {
+                System.out.println(" connected!\n");
+            } else {
+                throw new Exception("Ping did not recieve a pong. Ping is lonely :'(");
+            }
+        } catch (Exception e) {
+            System.err.println("\n\nPing did not recieve a pong. Ping is lonely :'(");
+            throw e;
+        }
+    }
+
+    @SuppressWarnings("null")
     private GameState getGameState(String stateName) {
         String context = "";
         String[] stateOptions = null;

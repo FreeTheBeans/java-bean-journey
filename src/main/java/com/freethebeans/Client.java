@@ -11,7 +11,7 @@ public class Client implements CommandLineRunner {
         try {
             SpringApplication.run(Client.class, args);
         } catch (Exception e) {
-            System.err.println("\nError: unable to start application. Enable developer logging for more information.");
+            System.err.println("\nError: oops. Enable developer logging for more information.");
         }
     }
 

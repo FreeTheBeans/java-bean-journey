@@ -6,8 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class GameManager {
-    private final String SERVER_ENDPOINT = "http://dev.bean.phipson.co.za";
-    // private final String SERVER_ENDPOINT = "http://prod.bean.phipson.co.za";
+    private final String SERVER_ENDPOINT = "http://bean.phipson.co.za";
     // for local testing
     // private final String SERVER_ENDPOINT = "http://localhost";
     private final int SERVER_PORT = 31415;

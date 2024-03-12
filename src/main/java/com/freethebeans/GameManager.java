@@ -39,17 +39,32 @@ public class GameManager {
             System.out.print("> ");
             String input = scanner.nextLine();
 
-            if (!input.equals("q")) {
-                int choiceNumber = Integer.parseInt(input);
-                currentStateID = currentStateTransitions[choiceNumber - 1];
-                // if (gameState.isEndState()) {
-                // System.out.println("Congratulations! You have escaped!");
-                // break;
-                // }
-            } else {
+
+            if (input.equals("q")) {
                 System.out.println("You have abandoned the bean brothers.");
                 break;
             }
+
+            try {
+                int choiceNumber = Integer.parseInt(input);
+
+                if (choiceNumber < currentStateOptions.length && choiceNumber > -1) {
+                    currentStateID = currentStateTransitions[choiceNumber - 1];
+
+                    // if (gameState.isEndState()) {
+                    // System.out.println("Congratulations! You have escaped!");
+                    // break;
+                    // }
+
+                } else {
+                    System.out.println("You have to choose one of the given options you silly bean.");
+                }
+
+                    
+            } catch (NumberFormatException e) {
+                System.out.println("You have to enter a number you silly bean.");
+            }
+            
         }
 
         scanner.close();

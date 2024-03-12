@@ -10,7 +10,6 @@ public class Client implements CommandLineRunner {
         printStartBanner();
         try {
             SpringApplication.run(Client.class, args);
-            System.exit(0);
         } catch (Exception e) {
             System.err.println("\nError: " + e);
         }

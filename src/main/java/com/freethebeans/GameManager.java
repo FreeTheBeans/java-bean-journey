@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class GameManager {
-    private final String SERVER_ENDPOINT = "http://dev.bean.phipson.co.za";
+    private final String SERVER_ENDPOINT = "http://bean.phipson.co.za";
     // private final String SERVER_ENDPOINT = "http://prod.bean.phipson.co.za";
     // for local testing
     // private final String SERVER_ENDPOINT = "http://localhost";
@@ -40,17 +40,41 @@ public class GameManager {
             System.out.print("> ");
             String input = scanner.nextLine();
 
-            if (!input.equals("q")) {
-                int choiceNumber = Integer.parseInt(input);
-                currentStateID = currentStateTransitions[choiceNumber - 1];
-                // if (gameState.isEndState()) {
-                // System.out.println("Congratulations! You have escaped!");
-                // break;
-                // }
+            if (input.length() == 1) {
+
+                if (input.equals("q")) {
+                    System.out.println("You have abandoned the bean brothers.");
+                    break;
+                }
+
+                try {
+                    int choiceNumber = Integer.parseInt(input);
+
+                    if (choiceNumber < currentStateOptions.length) {
+                        currentStateID = currentStateTransitions[choiceNumber - 1];
+
+                        // if (gameState.isEndState()) {
+                        // System.out.println("Congratulations! You have escaped!");
+                        // break;
+                        // }
+
+                    } else {
+                        System.out.println("You have to choose one of the given options you silly bean.");
+                    }
+
+                    
+                } catch (NumberFormatException e) {
+                    System.out.println("You have to enter a number you silly bean.");
+                }
+
+                
+                
+                
             } else {
-                System.out.println("You have abandoned the bean brothers.");
-                break;
+                System.out.println("Your input should only have a length of 1 you silly bean.");
             }
+
+            
         }
 
         scanner.close();

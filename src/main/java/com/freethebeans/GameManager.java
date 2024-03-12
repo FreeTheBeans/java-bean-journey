@@ -21,6 +21,7 @@ public class GameManager {
         pingPong();
 
         String currentStateID = "dummyState";
+        boolean error = false;
 
         System.out.println("-= PRESS ENTER =-");
         scanner.nextLine();
@@ -29,11 +30,15 @@ public class GameManager {
             GameState currentState = getGameState(currentStateID);
             String[] currentStateOptions = currentState.getOptions();
             String[] currentStateTransitions = currentState.getTransitions();
-            System.out.println('\n' + currentState.getContext() + '\n');
 
-            for (int i = 0; i < currentStateOptions.length; i++) {
-                System.out.println((i + 1) + ") " + currentStateOptions[i]);
+            if (!error) {
+                System.out.println('\n' + currentState.getContext() + '\n');
+
+                for (int i = 0; i < currentStateOptions.length; i++) {
+                    System.out.println((i + 1) + ") " + currentStateOptions[i]);
+                }
             }
+            
 
             // System.out.println("Select your next move:");
             System.out.print("> ");
@@ -48,7 +53,8 @@ public class GameManager {
             try {
                 int choiceNumber = Integer.parseInt(input);
 
-                if (choiceNumber < currentStateOptions.length && choiceNumber > -1) {
+                if (choiceNumber > 0 && choiceNumber <= currentStateOptions.length) {
+                    error = false;
                     currentStateID = currentStateTransitions[choiceNumber - 1];
 
                     // if (gameState.isEndState()) {
@@ -57,11 +63,13 @@ public class GameManager {
                     // }
 
                 } else {
+                    error = true;
                     System.out.println("You have to choose one of the given options you silly bean.");
                 }
 
                     
             } catch (NumberFormatException e) {
+                error = true;
                 System.out.println("You have to enter a number you silly bean.");
             }
             

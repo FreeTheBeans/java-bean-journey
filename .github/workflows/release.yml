@@ -27,11 +27,11 @@ jobs:
 
       - name: Create windows release
         id: create_release_win
-        uses: actions/create-release@v1
+        uses: actions/create-release@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: latest
+          tag_name: latest-win
           release_name: Release latest
           body: |
             Initial release for windows
@@ -40,11 +40,11 @@ jobs:
 
       - name: Create linux release
         id: create_release_linux
-        uses: actions/create-release@v1
+        uses: actions/create-release@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: latest
+          tag_name: latest-linux
           release_name: Release latest
           body: |
             Initial release for linux
@@ -53,11 +53,11 @@ jobs:
 
       - name: Create macos release
         id: create_release_macos
-        uses: actions/create-release@v1
+        uses: actions/create-release@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: latest
+          tag_name: latest-macos
           release_name: Release latest
           body: |
             Initial release for macos
@@ -66,7 +66,7 @@ jobs:
 
       - name: Upload windows release asset
         id: upload-release-asset-win 
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -77,7 +77,7 @@ jobs:
 
       - name: Upload linux release asset
         id: upload-release-asset-linux 
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -88,7 +88,7 @@ jobs:
 
       - name: Upload macos release asset
         id: upload-release-asset-macos 
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

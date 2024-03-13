@@ -14,7 +14,7 @@ jobs:
           ref: release
 
       - name: Fetch and merge latest changes from dev branch
-        run: git rebase origin dev
+        run: git rebase origin/dev
 
       - name: Setup JDK 21
         uses: actions/setup-java@v4

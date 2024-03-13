@@ -29,6 +29,7 @@ jobs:
           path: target/*.jar
 
   prep-release:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout release branch
         uses: actions/checkout@v4

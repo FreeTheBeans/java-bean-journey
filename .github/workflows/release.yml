@@ -13,6 +13,11 @@ jobs:
     needs: package
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: release
+      
       - name: Download releases
         uses: actions/download-artifact@v4
         with:
@@ -22,6 +27,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
           prerelease: false
           title: "Releases"
           files: |

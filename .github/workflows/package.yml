@@ -44,7 +44,9 @@ jobs:
       
       - name: Prepare releases
         run: |
-          for i in $(find . -type d -name "bean-cli-*"); cp "*.jar" $i done
+          for i in $(find . -type d -name "bean-cli-*"); do
+            cp *.jar $i 
+          done
           zip -r bean-cli-windows-x64.zip bean-cli-windows-x64/*
           tar -czvf bean-cli-macos-x64.tar.gz bean-cli-macos-x64
           tar -czvf bean-cli-linux-x64.tar.gz bean-cli-linux-x64

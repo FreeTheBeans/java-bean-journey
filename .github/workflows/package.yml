@@ -33,3 +33,8 @@ jobs:
           zip -r bean-cli-windows-x64.zip bean-cli-windows-x64/*
           tar -czvf bean-cli-macos-x64.tar.gz bean-cli-macos-x64
           tar -czvf bean-cli-linux-x64.tar.gz bean-cli-linux-x64
+
+      - name: Commit and push changes to release branch
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

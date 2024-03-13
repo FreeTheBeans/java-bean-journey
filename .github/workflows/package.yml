@@ -1,0 +1,40 @@
+name: Package
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v4
+        with: 
+          ref: release
+
+      - name: Fetch and merge latest changes from main branch
+        run: git pull origin main
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      
+      - name: Package into JAR
+        run: mvn --batch-mode package
+
+      - name: Prepare releases
+        run: |
+          for i in $(find . -type d -name "bean-cli-*"); 
+            cp target/*.jar $i 
+          done
+          zip -r bean-cli-windows-x64.zip bean-cli-windows-x64/*
+          tar -czvf bean-cli-macos-x64.tar.gz bean-cli-macos-x64
+          tar -czvf bean-cli-linux-x64.tar.gz bean-cli-linux-x64
+
+      - name: Commit and push changes to release branch
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

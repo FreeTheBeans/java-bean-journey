@@ -1,4 +1,5 @@
-name: Package project into JAR and prepare the releases
+name: Package
+
 on:
   workflow_call:
   workflow_dispatch:
@@ -12,7 +13,7 @@ jobs:
           ref: release
 
       - name: Fetch and merge latest changes from main branch
-      - run: git pull origin main
+        run: git pull origin main
 
       - name: Setup JDK 21
         uses: actions/setup-java@v4

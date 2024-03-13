@@ -10,6 +10,7 @@ jobs:
     uses: FreeTheBeans/java-bean-journey/.github/workflows/package.yml@release
 
   release:
+    needs: package
     runs-on: ubuntu-latest
     steps:
       - name: Download releases

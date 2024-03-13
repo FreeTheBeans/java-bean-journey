@@ -3,13 +3,15 @@ package com.freethebeans;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class Client implements CommandLineRunner {
     public static void main(String[] args) {
         printStartBanner();
         try {
-            SpringApplication.run(Client.class, args);
+            ConfigurableApplicationContext ctx = SpringApplication.run(Client.class, args);
+            ctx.close();
         } catch (Exception e) {
             System.err.println("\nError: " + e);
         }

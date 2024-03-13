@@ -7,7 +7,7 @@ on:
 
 jobs:
   package:
-    uses: FreeTheBeans/java-bean-journey/.github/workflows/package.yml@v1
+    uses: FreeTheBeans/java-bean-journey/.github/workflows/package.yml@release
 
   release:
     runs-on: ubuntu-latest

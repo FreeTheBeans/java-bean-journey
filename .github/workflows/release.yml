@@ -20,6 +20,22 @@ jobs:
         with:
           ref: release
       
+      - uses: cb80/delrel@latest
+        with:
+          tag: latest-win
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - uses: cb80/delrel@latest
+        with:
+          tag: latest-macos
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: cb80/delrel@latest
+        with:
+          tag: latest-linux
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Download release artifacts
         uses: actions/download-artifact@v4
         with:
@@ -34,7 +50,7 @@ jobs:
           tag_name: latest-win
           release_name: Release latest
           body: |
-            Initial release for windows
+            Release for windows
           draft: false
           prerelease: false
 
@@ -47,7 +63,7 @@ jobs:
           tag_name: latest-linux
           release_name: Release latest
           body: |
-            Initial release for linux
+            Release for linux
           draft: false
           prerelease: false
 
@@ -60,7 +76,7 @@ jobs:
           tag_name: latest-macos
           release_name: Release latest
           body: |
-            Initial release for macos
+            Release for macos
           draft: false
           prerelease: false
 

@@ -13,8 +13,8 @@ jobs:
         with: 
           ref: release
 
-      - name: Fetch and merge latest changes from main branch
-        run: git pull origin main
+      - name: Fetch and merge latest changes from dev branch
+        run: git pull origin dev
 
       - name: Setup JDK 21
         uses: actions/setup-java@v4

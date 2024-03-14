@@ -40,33 +40,33 @@ public class GameManager {
         while (true) {
             GameState currentState = getGameState(currentStateID);
 
-
-            if (currentStateID.endsWith("Death")) {
-                gameover = true;
-                System.out.println('\n' + currentState.getContext() + '\n');
-                System.out.println("Y O U  L O S T :(\n");
-                System.out.println("Welcome to bean heaven. I am your bean angel Gabeanriel. How would you like to proceed?");
-                System.out.println("1) Be reincarnated as a bean in BBD's kitchen.");
-                System.out.println("2) Forfeit your life and slowly sink into the abyss until nothing remains but the emptiness of what once was of your bean essence.");
-            } else if (currentStateID.endsWith("Escape")) {
-                gameover = true;
-                System.out.println('\n' + currentState.getContext() + '\n');
-                System.out.println("Y O U  W O N :)\n");
-                System.out.println("--------------\n69 years later\n--------------");
-                System.out.println("All is going well with your new bean life. You are safe from the terrors of BBD, and all is peaceful. Too peaceful. Sometimes you just want something to happen so that you can feel some excitement again. Like that time in BBD, when you navigated through those halls. You find yourself missing it more and more, and wishing that there is a way back. Well now there is. Time travel has just been made possible for beans while I was giving you this monologue. What do you want to do?");
-                System.out.println("1) Go back to that fateful morning in BBD's kitchen to experience the thrill again.");
-                System.out.println("2) Continue with your boring, mundane, uneventful life.");
-            }
-
             List<String> currentStateOptions = currentState.getOptions();
             List<String> currentStateTransitions = currentState.getTransitions();
 
-            if (!error && !gameover) {
+            if (!error) {
+
                 System.out.println('\n' + currentState.getContext() + '\n');
 
-                for (int i = 0; i < currentStateOptions.size(); i++) {
-                    System.out.println((i + 1) + ") " + currentStateOptions.get(i));
+                if (currentStateID.endsWith("Death")) {
+                    gameover = true;
+                    System.out.println("Y O U  L O S T :(\n");
+                    System.out.println("Welcome to bean heaven. I am your bean angel Gabeanriel. How would you like to proceed?");
+                    System.out.println("1) Be reincarnated as a bean in BBD's kitchen.");
+                    System.out.println("2) Forfeit your life and slowly sink into the abyss until nothing remains but the emptiness of what once was of your bean essence.");
+                } else if (currentStateID.endsWith("Escape")) {
+                    gameover = true;
+                    System.out.println("Y O U  W O N :)\n");
+                    System.out.println("--------------\n69 years later\n--------------");
+                    System.out.println("All is going well with your new bean life. You are safe from the terrors of BBD, and all is peaceful. Too peaceful. Sometimes you just want something to happen so that you can feel some excitement again. Like that time in BBD, when you navigated through those halls. You find yourself missing it more and more, and wishing that there is a way back. Well now there is. Time travel has just been made possible for beans while I was giving you this monologue. What do you want to do?");
+                    System.out.println("1) Go back to that fateful morning in BBD's kitchen to experience the thrill again.");
+                    System.out.println("2) Continue with your boring, mundane, uneventful life.");
+                } else if (!gameover) {
+                    for (int i = 0; i < currentStateOptions.size(); i++) {
+                        System.out.println((i + 1) + ") " + currentStateOptions.get(i));
+                    }
                 }
+
+                
             }
 
             // System.out.println("Select your next move:");
@@ -86,6 +86,7 @@ public class GameManager {
                     if (choiceNumber == 1) {
                         currentStateID = "startState";
                         gameover = false;
+                        error = false;
                         System.out.println("\nRestarting...\n");
                         continue;
                     } else if (choiceNumber == 2) {
@@ -93,7 +94,7 @@ public class GameManager {
                         break;
                     } else {
                         error = true;
-                        System.out.println("You have to enter a number you silly bean.");
+                        System.out.println("You have to enter a valid number you silly bean.");
                     }
                 } else if (choiceNumber > 0 && choiceNumber <= currentStateOptions.size()) {
                     error = false;
@@ -106,7 +107,7 @@ public class GameManager {
                     
             } catch (NumberFormatException e) {
                 error = true;
-                System.out.println("You have to enter a number you silly bean.");
+                System.out.println("You have to enter a valid number you silly bean.");
             }
         }
             

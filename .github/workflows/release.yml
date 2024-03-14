@@ -22,18 +22,7 @@ jobs:
       
       - uses: cb80/delrel@latest
         with:
-          tag: latest-win
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-
-      - uses: cb80/delrel@latest
-        with:
-          tag: latest-macos
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: cb80/delrel@latest
-        with:
-          tag: latest-linux
+          tag: latest
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download release artifacts
@@ -41,74 +30,48 @@ jobs:
         with:
           name: releases
 
-      - name: Create windows release
-        id: create_release_win
+      - name: Create release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: latest-win
-          release_name: Win_64 release
+          tag_name: latest
+          release_name: bean-cli latest
           body: |
-            Release for windows
+            Bean CLI client application
           draft: false
           prerelease: false
 
-      - name: Create linux release
-        id: create_release_linux
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: latest-linux
-          release_name: Linux_64 release
-          body: |
-            Release for linux
-          draft: false
-          prerelease: false
-
-      - name: Create macos release
-        id: create_release_macos
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: latest-macos
-          release_name: MacOS_64 release
-          body: |
-            Release for macos
-          draft: false
-          prerelease: false
-
-      - name: Upload windows release asset
+      - name: Upload release asset (Windows)
         id: upload-release-asset-win 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release_win.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./bean-cli-windows-x64.zip
           asset_name: bean-cli-windows-x64.zip
           asset_content_type: application/zip
 
-      - name: Upload linux release asset
-        id: upload-release-asset-linux 
+      - name: Upload release asset (Linux)
+        id: upload-release-asset-linux
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bean-cli-linux-x64.tar.gz
+          asset_name: bean-cli-linux-x64.tar.gz
+          asset_content_type: application/tar.gz
+
+      - name: Upload linux release asset (MacOS)
+        id: upload-release-asset-macos
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release_linux.outputs.upload_url }}
-          asset_path: ./bean-cli-linux-x64.tar.gz
-          asset_name: bean-cli-linux-x64.tar.gz
-          asset_content_type: application/tar.gz
-
-      - name: Upload macos release asset
-        id: upload-release-asset-macos 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release_macos.outputs.upload_url }}
           asset_path: ./bean-cli-macos-x64.tar.gz
           asset_name: bean-cli-macos-x64.tar.gz
           asset_content_type: application/tar.gz

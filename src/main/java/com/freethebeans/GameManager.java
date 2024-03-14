@@ -31,33 +31,48 @@ public class GameManager {
         String currentStateID = START_STATE_ID;
         @SuppressWarnings("unused")
         boolean inputError = false;
+        boolean error = false;
+        boolean gameover = false;
 
         System.out.println("-= PRESS ENTER =-");
         scanner.nextLine();
 
         while (true) {
             GameState currentState = getGameState(currentStateID);
+
+
+            if (currentStateID.endsWith("Death")) {
+                gameover = true;
+                System.out.println('\n' + currentState.getContext() + '\n');
+                System.out.println("Y O U  L O S T :(\n");
+                System.out.println("Welcome to bean heaven. I am your bean angel Gabeanriel. How would you like to proceed?");
+                System.out.println("1) Be reincarnated as a bean in BBD's kitchen.");
+                System.out.println("2) Forfeit your life and slowly sink into the abyss until nothing remains but the emptiness of what once was of your bean essence.");
+            } else if (currentStateID.endsWith("Escape")) {
+                gameover = true;
+                System.out.println('\n' + currentState.getContext() + '\n');
+                System.out.println("Y O U  W O N :)\n");
+                System.out.println("--------------\n69 years later\n--------------");
+                System.out.println("All is going well with your new bean life. You are safe from the terrors of BBD, and all is peaceful. Too peaceful. Sometimes you just want something to happen so that you can feel some excitement again. Like that time in BBD, when you navigated through those halls. You find yourself missing it more and more, and wishing that there is a way back. Well now there is. Time travel has just been made possible for beans while I was giving you this monologue. What do you want to do?");
+                System.out.println("1) Go back to that fateful morning in BBD's kitchen to experience the thrill again.");
+                System.out.println("2) Continue with your boring, mundane, uneventful life.");
+            }
+
             List<String> currentStateOptions = currentState.getOptions();
             List<String> currentStateTransitions = currentState.getTransitions();
-            System.out.println('\n' + currentState.getContext() + '\n');
 
-            for (int i = 0; i < currentStateOptions.size(); i++) {
-                System.out.println((i + 1) + ") " + currentStateOptions.get(i));
+            if (!error && !gameover) {
+                System.out.println('\n' + currentState.getContext() + '\n');
 
+                for (int i = 0; i < currentStateOptions.size(); i++) {
+                    System.out.println((i + 1) + ") " + currentStateOptions.get(i));
+                }
             }
 
             // System.out.println("Select your next move:");
             System.out.print("> ");
             String input = scanner.nextLine();
 
-            if (!input.equals("q")) {
-                int choiceNumber = Integer.parseInt(input);
-                currentStateID = currentStateTransitions.get(choiceNumber - 1);
-                // if (gameState.isEndState()) {
-                // System.out.println("Congratulations! You have escaped!");
-                // break;
-                // }
-            } else {
 
                 if (input.equals("q")) {
                     System.out.println("You have abandoned the bean brothers.");
@@ -67,29 +82,39 @@ public class GameManager {
                 try {
                     int choiceNumber = Integer.parseInt(input);
 
-                    if (choiceNumber > 0 && choiceNumber <= currentStateOptions.size()) {
-                        inputError = false;
-                        currentStateID = currentStateTransitions.get(choiceNumber - 1);
-
-                        // if (gameState.isEndState()) {
-                        // System.out.println("Congratulations! You have escaped!");
-                        // break;
-                        // }
-
+                if (gameover) {
+                    if (choiceNumber == 1) {
+                        currentStateID = "startState";
+                        gameover = false;
+                        System.out.println("\nRestarting...\n");
+                        continue;
+                    } else if (choiceNumber == 2) {
+                        System.out.println("You have abandoned the bean brothers.");
+                        break;
                     } else {
-                        inputError = true;
-                        System.out.println("You have to choose one of the given options you silly bean.");
+                        error = true;
+                        System.out.println("You have to enter a number you silly bean.");
                     }
-
-                } catch (NumberFormatException e) {
-                    inputError = true;
-                    System.out.println("You have to enter a number you silly bean.");
+                } else if (choiceNumber > 0 && choiceNumber <= currentStateOptions.size()) {
+                    error = false;
+                    currentStateID = currentStateTransitions.get(choiceNumber - 1);
+                } else {
+                    error = true;
+                    System.out.println("You have to choose one of the given options you silly bean.");
                 }
 
+                    
+            } catch (NumberFormatException e) {
+                error = true;
+                System.out.println("You have to enter a number you silly bean.");
             }
         }
+            
         scanner.close();
     }
+
+    
+
 
     @SuppressWarnings("null")
     public void pingPong() throws Exception {

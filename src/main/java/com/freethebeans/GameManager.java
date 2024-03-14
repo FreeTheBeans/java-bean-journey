@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 public class GameManager {
     private final String SERVER_ENDPOINT = "http://bean.phipson.co.za";
-    // private final String SERVER_ENDPOINT = "http://prod.bean.phipson.co.za";
+
     // for local testing
     // private final String SERVER_ENDPOINT = "http://localhost";
     private final int SERVER_PORT = 31415;
@@ -28,6 +28,7 @@ public class GameManager {
         pingPong();
 
         String currentStateID = "dummyState";
+        boolean error = false;
 
         System.out.println("-= PRESS ENTER =-");
         scanner.nextLine();
@@ -40,7 +41,9 @@ public class GameManager {
 
             for (int i = 0; i < currentStateOptions.size(); i++) {
                 System.out.println((i + 1) + ") " + currentStateOptions.get(i));
+
             }
+            
 
             // System.out.println("Select your next move:");
             System.out.print("> ");
@@ -54,9 +57,35 @@ public class GameManager {
                 // break;
                 // }
             } else {
+
+            if (input.equals("q")) {
                 System.out.println("You have abandoned the bean brothers.");
                 break;
             }
+
+            try {
+                int choiceNumber = Integer.parseInt(input);
+
+                if (choiceNumber > 0 && choiceNumber <= currentStateOptions.length) {
+                    error = false;
+                    currentStateID = currentStateTransitions[choiceNumber - 1];
+
+                    // if (gameState.isEndState()) {
+                    // System.out.println("Congratulations! You have escaped!");
+                    // break;
+                    // }
+
+                } else {
+                    error = true;
+                    System.out.println("You have to choose one of the given options you silly bean.");
+                }
+
+                    
+            } catch (NumberFormatException e) {
+                error = true;
+                System.out.println("You have to enter a number you silly bean.");
+            }
+            
         }
 
         scanner.close();

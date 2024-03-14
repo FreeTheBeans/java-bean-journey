@@ -48,7 +48,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: latest-win
-          release_name: Release latest
+          release_name: Win_64 release
           body: |
             Release for windows
           draft: false
@@ -61,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: latest-linux
-          release_name: Release latest
+          release_name: Linux_64 release
           body: |
             Release for linux
           draft: false
@@ -74,7 +74,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: latest-macos
-          release_name: Release latest
+          release_name: MacOS_64 release
           body: |
             Release for macos
           draft: false

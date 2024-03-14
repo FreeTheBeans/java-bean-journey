@@ -1,0 +1,65 @@
+name: Package
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v4
+        with: 
+          ref: main
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      
+      - name: Package into JAR
+        run: mvn --batch-mode package
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jar-package
+          path: target/*.jar
+
+  prep-release:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v4
+        with: 
+          ref: release
+      
+      - name: Download jar artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: jar-package
+      
+      - name: Prepare releases
+        run: |
+          tar -xf bean-cli-windows-x64.tar.gz
+          tar -xf bean-cli-macos-x64.tar.gz
+          tar -xf bean-cli-linux-x64.tar.gz
+
+          for i in $(find . -type d -name "bean-cli-*"); do
+            cp *.jar $i 
+          done
+          
+          zip -r bean-cli-windows-x64.zip bean-cli-windows-x64/*
+          tar -czf bean-cli-macos-x64.tar.gz bean-cli-macos-x64
+          tar -czf bean-cli-linux-x64.tar.gz bean-cli-linux-x64
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: releases
+          path: |
+            *.zip
+            *.tar.gz

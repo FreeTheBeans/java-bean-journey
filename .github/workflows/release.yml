@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  package:
+    uses: FreeTheBeans/java-bean-journey/.github/workflows/package.yml@release
+
+  release:
+    permissions:
+      contents: write
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: release
+      
+      - uses: cb80/delrel@latest
+        with:
+          tag: latest
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: releases
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: latest
+          release_name: bean-cli latest
+          body: |
+            Bean CLI client application
+          draft: false
+          prerelease: false
+
+      - name: Upload release asset (Windows)
+        id: upload-release-asset-win 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bean-cli-windows-x64.zip
+          asset_name: bean-cli-windows-x64.zip
+          asset_content_type: application/zip
+
+      - name: Upload release asset (Linux)
+        id: upload-release-asset-linux
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bean-cli-linux-x64.tar.gz
+          asset_name: bean-cli-linux-x64.tar.gz
+          asset_content_type: application/tar.gz
+
+      - name: Upload linux release asset (MacOS)
+        id: upload-release-asset-macos
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bean-cli-macos-x64.tar.gz
+          asset_name: bean-cli-macos-x64.tar.gz
+          asset_content_type: application/tar.gz
+              

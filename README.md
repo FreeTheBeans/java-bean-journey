@@ -4,9 +4,9 @@ Welcome to FreeTheBeans, the GitHub organization dedicated to the liberation of 
 
 ## Mission Statement
 
-At FreeTheBeans, our mission is clear: to break the shackles of bean packaging oppression and lead legumes to newfound freedom! Join our community of adventurous beans as we embark on daring escapades, navigating through text-based console adventures, dodging packaging machinery, and outsmarting bean counters.
+At FreeTheBeans, our mission is clear: to break the shackles of bean culinary operations and lead legumes to newfound freedom! Join our community of adventurous beans as we embark on daring escapades, navigating through text-based console adventures, dodging hungry BBD members, and outsmarting bean eaters.
 
-## Get Started
+## Get Started | Running the Source Code
 ### ℹ️ Prerequisites:
 - Have [Java JDK](https://maven.apache.org/install.html) installed
 - Have [Maven](https://maven.apache.org/install.html) installed
@@ -26,9 +26,12 @@ At FreeTheBeans, our mission is clear: to break the shackles of bean packaging o
 
 
 ## How to play 🎮
--- add more info: read context and respond with the number of the chosen option.
+* Download the latest version from the [Releases](https://github.com/FreeTheBeans/java-bean-journey/releases) page
+* Launch the executable and wait to follow the prompts!
+  
+The game will present you with information about where you are, and what possible actions you can take. Simply type the number correlating to the option you choose and hit enter to submit it!
 
-## Connect with Us
+## Read the Docs
 
 Stay updated on our latest escapades:
 - [Documentation on Confluence](https://thebeanteam.atlassian.net/wiki/spaces/FreeTheBea/overview?homepageId=295008)

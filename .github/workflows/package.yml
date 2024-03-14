@@ -44,12 +44,17 @@ jobs:
       
       - name: Prepare releases
         run: |
+          tar -xf bean-cli-windows-x64.tar.gz
+          tar -xf bean-cli-macos-x64.tar.gz
+          tar -xf bean-cli-linux-x64.tar.gz
+
           for i in $(find . -type d -name "bean-cli-*"); do
             cp *.jar $i 
           done
+          
           zip -r bean-cli-windows-x64.zip bean-cli-windows-x64/*
-          tar -czvf bean-cli-macos-x64.tar.gz bean-cli-macos-x64
-          tar -czvf bean-cli-linux-x64.tar.gz bean-cli-linux-x64
+          tar -czf bean-cli-macos-x64.tar.gz bean-cli-macos-x64
+          tar -czf bean-cli-linux-x64.tar.gz bean-cli-linux-x64
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

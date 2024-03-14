@@ -3,11 +3,13 @@ package com.freethebeans;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 import org.springframework.web.client.RestTemplate;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class GameManager {
+    private final String START_STATE_ID = "startState";
     private final String SERVER_ENDPOINT = "http://bean.phipson.co.za";
 
     // for local testing
@@ -19,16 +21,16 @@ public class GameManager {
     public GameManager(Scanner scanner, RestTemplate restTemplate) {
         this.scanner = scanner;
         this.restTemplate = restTemplate;
-        // scanner = new Scanner(System.in);
-        // restTemplate = new RestTemplate();
     }
 
     public void runGame() throws Exception {
         // check for connection to server - expect 'pong'
         pingPong();
 
-        String currentStateID = "dummyState";
-        boolean error = false;
+        // TODO: request stored state for user
+        String currentStateID = START_STATE_ID;
+        @SuppressWarnings("unused")
+        boolean inputError = false;
 
         System.out.println("-= PRESS ENTER =-");
         scanner.nextLine();
@@ -43,7 +45,6 @@ public class GameManager {
                 System.out.println((i + 1) + ") " + currentStateOptions.get(i));
 
             }
-            
 
             // System.out.println("Select your next move:");
             System.out.print("> ");
@@ -51,46 +52,46 @@ public class GameManager {
 
             if (!input.equals("q")) {
                 int choiceNumber = Integer.parseInt(input);
-                currentStateID = currentStateTransitions.get(choiceNumber-1);
+                currentStateID = currentStateTransitions.get(choiceNumber - 1);
                 // if (gameState.isEndState()) {
                 // System.out.println("Congratulations! You have escaped!");
                 // break;
                 // }
             } else {
 
-            if (input.equals("q")) {
-                System.out.println("You have abandoned the bean brothers.");
-                break;
-            }
-
-            try {
-                int choiceNumber = Integer.parseInt(input);
-
-                if (choiceNumber > 0 && choiceNumber <= currentStateOptions.length) {
-                    error = false;
-                    currentStateID = currentStateTransitions[choiceNumber - 1];
-
-                    // if (gameState.isEndState()) {
-                    // System.out.println("Congratulations! You have escaped!");
-                    // break;
-                    // }
-
-                } else {
-                    error = true;
-                    System.out.println("You have to choose one of the given options you silly bean.");
+                if (input.equals("q")) {
+                    System.out.println("You have abandoned the bean brothers.");
+                    break;
                 }
 
-                    
-            } catch (NumberFormatException e) {
-                error = true;
-                System.out.println("You have to enter a number you silly bean.");
-            }
-            
-        }
+                try {
+                    int choiceNumber = Integer.parseInt(input);
 
+                    if (choiceNumber > 0 && choiceNumber <= currentStateOptions.size()) {
+                        inputError = false;
+                        currentStateID = currentStateTransitions.get(choiceNumber - 1);
+
+                        // if (gameState.isEndState()) {
+                        // System.out.println("Congratulations! You have escaped!");
+                        // break;
+                        // }
+
+                    } else {
+                        inputError = true;
+                        System.out.println("You have to choose one of the given options you silly bean.");
+                    }
+
+                } catch (NumberFormatException e) {
+                    inputError = true;
+                    System.out.println("You have to enter a number you silly bean.");
+                }
+
+            }
+        }
         scanner.close();
     }
 
+    @SuppressWarnings("null")
     public void pingPong() throws Exception {
         try {
             String request = String.format("%s:%d/api/ping", SERVER_ENDPOINT, SERVER_PORT);
@@ -126,11 +127,10 @@ public class GameManager {
             JSONArray transitionsArray = innerJSON.getJSONArray("transitions");
 
             int optionsLength = optionsArray.length();
-            
 
             for (int i = 0; i < optionsLength; i++) {
                 stateOptions.add(optionsArray.getString(i));
-                stateTransitions.add( transitionsArray.getString(i));
+                stateTransitions.add(transitionsArray.getString(i));
             }
         } catch (Exception e) {
             System.err.println("Error: error getting state information.");

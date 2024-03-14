@@ -1,5 +1,7 @@
 package com.freethebeans;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import org.springframework.web.client.RestTemplate;
 import org.json.JSONArray;
@@ -7,13 +9,18 @@ import org.json.JSONObject;
 
 public class GameManager {
     private final String SERVER_ENDPOINT = "http://bean.phipson.co.za";
+
     // for local testing
     // private final String SERVER_ENDPOINT = "http://localhost";
     private final int SERVER_PORT = 31415;
-    private Scanner scanner;
+    final Scanner scanner;
+    final RestTemplate restTemplate;
 
-    GameManager() {
-        scanner = new Scanner(System.in);
+    public GameManager(Scanner scanner, RestTemplate restTemplate) {
+        this.scanner = scanner;
+        this.restTemplate = restTemplate;
+        // scanner = new Scanner(System.in);
+        // restTemplate = new RestTemplate();
     }
 
     public void runGame() throws Exception {
@@ -28,15 +35,13 @@ public class GameManager {
 
         while (true) {
             GameState currentState = getGameState(currentStateID);
-            String[] currentStateOptions = currentState.getOptions();
-            String[] currentStateTransitions = currentState.getTransitions();
+            List<String> currentStateOptions = currentState.getOptions();
+            List<String> currentStateTransitions = currentState.getTransitions();
+            System.out.println('\n' + currentState.getContext() + '\n');
 
-            if (!error) {
-                System.out.println('\n' + currentState.getContext() + '\n');
+            for (int i = 0; i < currentStateOptions.size(); i++) {
+                System.out.println((i + 1) + ") " + currentStateOptions.get(i));
 
-                for (int i = 0; i < currentStateOptions.length; i++) {
-                    System.out.println((i + 1) + ") " + currentStateOptions[i]);
-                }
             }
             
 
@@ -44,6 +49,14 @@ public class GameManager {
             System.out.print("> ");
             String input = scanner.nextLine();
 
+            if (!input.equals("q")) {
+                int choiceNumber = Integer.parseInt(input);
+                currentStateID = currentStateTransitions.get(choiceNumber-1);
+                // if (gameState.isEndState()) {
+                // System.out.println("Congratulations! You have escaped!");
+                // break;
+                // }
+            } else {
 
             if (input.equals("q")) {
                 System.out.println("You have abandoned the bean brothers.");
@@ -78,11 +91,10 @@ public class GameManager {
         scanner.close();
     }
 
-    private void pingPong() throws Exception {
+    public void pingPong() throws Exception {
         try {
             String request = String.format("%s:%d/api/ping", SERVER_ENDPOINT, SERVER_PORT);
-            @SuppressWarnings("null")
-            String response = new RestTemplate().getForObject(request, String.class);
+            String response = restTemplate.getForObject(request, String.class);
             JSONObject responseJSON = new JSONObject(response);
             String res = responseJSON.getString("message");
             if (res.equals("pong")) {
@@ -97,13 +109,13 @@ public class GameManager {
     }
 
     @SuppressWarnings("null")
-    private GameState getGameState(String stateName) {
+    public GameState getGameState(String stateName) {
         String context = "";
-        String[] stateOptions = null;
-        String[] stateTransitions = null;
+        List<String> stateOptions = new ArrayList<>();
+        List<String> stateTransitions = new ArrayList<>();
         try {
             String request = String.format("%s:%d/api/state/%s", SERVER_ENDPOINT, SERVER_PORT, stateName);
-            String response = new RestTemplate().getForObject(request, String.class);
+            String response = restTemplate.getForObject(request, String.class);
 
             JSONObject responseJSON = new JSONObject(response);
             String message = responseJSON.getString("message");
@@ -114,12 +126,11 @@ public class GameManager {
             JSONArray transitionsArray = innerJSON.getJSONArray("transitions");
 
             int optionsLength = optionsArray.length();
-            stateOptions = new String[optionsLength];
-            stateTransitions = new String[optionsLength];
+            
 
             for (int i = 0; i < optionsLength; i++) {
-                stateOptions[i] = optionsArray.getString(i);
-                stateTransitions[i] = transitionsArray.getString(i);
+                stateOptions.add(optionsArray.getString(i));
+                stateTransitions.add( transitionsArray.getString(i));
             }
         } catch (Exception e) {
             System.err.println("Error: error getting state information.");

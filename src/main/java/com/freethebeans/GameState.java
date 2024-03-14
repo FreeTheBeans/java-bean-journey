@@ -1,11 +1,13 @@
 package com.freethebeans;
 
+import java.util.List;
+
 public class GameState {
     private String context;
-    private String[] options;
-    private String[] transitions;
+    private List<String> options;
+    private List<String> transitions;
 
-    public GameState(String context, String[] options, String[] transitions) {
+    public GameState(String context, List<String> options, List<String> transitions) {
         this.context = context;
         this.options = options;
         this.transitions = transitions;
@@ -15,11 +17,11 @@ public class GameState {
         return context;
     }
 
-    public String[] getOptions() {
+    public List<String> getOptions() {
         return options;
     }
 
-    public String[] getTransitions() {
+    public List<String> getTransitions() {
         return transitions;
     }
 }

@@ -1,15 +1,20 @@
 package com.freethebeans;
 
+import java.util.Scanner;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class Client implements CommandLineRunner {
     public static void main(String[] args) {
         printStartBanner();
         try {
-            SpringApplication.run(Client.class, args);
+            ConfigurableApplicationContext ctx = SpringApplication.run(Client.class, args);
+            ctx.close();
         } catch (Exception e) {
             System.err.println("\nError: " + e);
         }
@@ -17,7 +22,9 @@ public class Client implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        GameManager gameManager = new GameManager();
+        GameManager gameManager = new GameManager(
+                new Scanner(System.in),
+                new RestTemplate());
         gameManager.runGame();
     }
 
